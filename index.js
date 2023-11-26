@@ -37,8 +37,14 @@ async function run() {
   // get trainer data by id
   app.get("/trainer/:id", async (req, res) => {
     const id = req.params.id;
-    const query = { _id: new ObjectId(id) }; 
+    const query = { _id: new ObjectId(id) };
     const result = await trainerCollection.findOne(query);
+    res.send(result);
+  });
+
+  app.post("/trainer", async (req, res) => {
+    const item = req.body;
+    const result = await trainerCollection.insertOne(item);
     res.send(result);
   });
 
