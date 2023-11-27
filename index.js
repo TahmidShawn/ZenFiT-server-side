@@ -22,6 +22,7 @@ const client = new MongoClient(uri, {
 async function run() {
   const featuredCollection = client.db("zenDB").collection("featured");
   const trainerCollection = client.db("zenDB").collection("trainer");
+  const newsLetterCollection = client.db("zenDB").collection("newsLetterEmail");
 
   // get featured data
   app.get("/featured", async (req, res) => {
@@ -45,6 +46,12 @@ async function run() {
   app.post("/trainer", async (req, res) => {
     const item = req.body;
     const result = await trainerCollection.insertOne(item);
+    res.send(result);
+  });
+
+  app.post("/newsLetterEmail", async (req, res) => {
+    const item = req.body;
+    const result = await newsLetterCollection.insertOne(item);
     res.send(result);
   });
 
