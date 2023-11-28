@@ -35,6 +35,7 @@ async function run() {
     const result = await trainerCollection.find().toArray();
     res.send(result);
   });
+
   // get trainer data by id
   app.get("/trainer/:id", async (req, res) => {
     const id = req.params.id;
@@ -43,15 +44,37 @@ async function run() {
     res.send(result);
   });
 
+  // store trainer data
   app.post("/trainer", async (req, res) => {
     const item = req.body;
     const result = await trainerCollection.insertOne(item);
     res.send(result);
   });
 
+  // store newsLetterData data
   app.post("/newsLetterEmail", async (req, res) => {
     const item = req.body;
     const result = await newsLetterCollection.insertOne(item);
+    res.send(result);
+  });
+
+  // get newsLetterData Data
+  app.get("/newsLetterEmail", async (req, res) => {
+    const result = await newsLetterCollection.find().toArray();
+    res.send(result);
+  });
+
+  app.patch("/trainer/:id", async (req, res) => {
+    const id = req.params.id;
+    const filter = { _id: new ObjectId(id) };
+    const updatedDoc = {
+      $set: {
+        role: "trainer",
+      },
+    };
+
+    const result = await trainerCollection.updateOne(filter, updatedDoc);
+
     res.send(result);
   });
 
