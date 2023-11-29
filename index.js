@@ -23,6 +23,7 @@ async function run() {
   const featuredCollection = client.db("zenDB").collection("featured");
   const trainerCollection = client.db("zenDB").collection("trainer");
   const newsLetterCollection = client.db("zenDB").collection("newsLetterEmail");
+  const userCollection = client.db("zenDB").collection("users");
 
   // get featured data
   app.get("/featured", async (req, res) => {
@@ -75,6 +76,17 @@ async function run() {
 
     const result = await trainerCollection.updateOne(filter, updatedDoc);
 
+    res.send(result);
+  });
+
+  app.post("/users", async (req, res) => {
+    const item = req.body;
+    const result = await userCollection.insertOne(item);
+    res.send(result);
+  });
+
+  app.get("/users", async (req, res) => {
+    const result = await userCollection.find().toArray();
     res.send(result);
   });
 
