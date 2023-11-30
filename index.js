@@ -24,6 +24,8 @@ async function run() {
   const trainerCollection = client.db("zenDB").collection("trainer");
   const newsLetterCollection = client.db("zenDB").collection("newsLetterEmail");
   const userCollection = client.db("zenDB").collection("users");
+  const plansCollection = client.db("zenDB").collection("plans");
+  const classCollection = client.db("zenDB").collection("class");
 
   // get featured data
   app.get("/featured", async (req, res) => {
@@ -87,6 +89,28 @@ async function run() {
 
   app.get("/users", async (req, res) => {
     const result = await userCollection.find().toArray();
+    res.send(result);
+  });
+
+  app.post("/plans", async (req, res) => {
+    const item = req.body;
+    const result = await plansCollection.insertOne(item);
+    res.send(result);
+  });
+
+  app.get("/plans", async (req, res) => {
+    const result = await plansCollection.find().toArray();
+    res.send(result);
+  });
+
+  app.post("/class", async (req, res) => {
+    const item = req.body;
+    const result = await classCollection.insertOne(item);
+    res.send(result);
+  });
+
+  app.get("/class", async (req, res) => {
+    const result = await classCollection.find().toArray();
     res.send(result);
   });
 
