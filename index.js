@@ -26,6 +26,7 @@ async function run() {
   const userCollection = client.db("zenDB").collection("users");
   const plansCollection = client.db("zenDB").collection("plans");
   const classCollection = client.db("zenDB").collection("class");
+  const imagesCollection = client.db("zenDB").collection("images");
 
   // get featured data
   app.get("/featured", async (req, res) => {
@@ -111,6 +112,11 @@ async function run() {
 
   app.get("/class", async (req, res) => {
     const result = await classCollection.find().toArray();
+    res.send(result);
+  });
+
+  app.get("/images", async (req, res) => {
+    const result = await imagesCollection.find().toArray();
     res.send(result);
   });
 
