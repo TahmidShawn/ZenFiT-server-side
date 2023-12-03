@@ -27,6 +27,7 @@ async function run() {
   const plansCollection = client.db("zenDB").collection("plans");
   const classCollection = client.db("zenDB").collection("class");
   const imagesCollection = client.db("zenDB").collection("images");
+  const forumsCollection = client.db("zenDB").collection("forums");
 
   // get featured data
   app.get("/featured", async (req, res) => {
@@ -69,17 +70,22 @@ async function run() {
   });
 
   app.patch("/trainer/:id", async (req, res) => {
-    const id = req.params.id;
-    const filter = { _id: new ObjectId(id) };
-    const updatedDoc = {
-      $set: {
-        role: "trainer",
-      },
-    };
+    try {
+      const id = req.params.id;
+      const filter = { _id: new ObjectId(id) };
+      const updatedDoc = {
+        $set: {
+          role: "trainer",
+        },
+      };
 
-    const result = await trainerCollection.updateOne(filter, updatedDoc);
+      const result = await trainerCollection.updateOne(filter, updatedDoc);
 
-    res.send(result);
+      res.send(result);
+    } catch (error) {
+      console.error("Error updating trainer:", error);
+      res.status(500).send({ error: "Internal Server Error" });
+    }
   });
 
   app.post("/users", async (req, res) => {
@@ -117,6 +123,17 @@ async function run() {
 
   app.get("/images", async (req, res) => {
     const result = await imagesCollection.find().toArray();
+    res.send(result);
+  });
+
+  app.post("/forums", async (req, res) => {
+    const item = req.body;
+    const result = await forumsCollection.insertOne(item);
+    res.send(result);
+  });
+
+  app.get("/forums", async (req, res) => {
+    const result = await forumsCollection.find().toArray();
     res.send(result);
   });
 
